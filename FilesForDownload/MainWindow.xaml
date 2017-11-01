@@ -5,8 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FilesForDownload"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Files for download" SizeToContent="WidthAndHeight" Background="DimGray" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="15" />
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="35" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="15" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="15" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="15" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="15" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="15" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <Label Content="Upload file for customer" FontFamily="Calibri Light" FontSize="20" Foreground="WhiteSmoke" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+        <Button Height="40" Width="150" Content="Select file" Grid.Row="3" Grid.Column="3" Command="{Binding SelectFileCommand}"/>
+        <TextBox Height="40" Width="300" Grid.Row="3" Grid.Column="1" IsEnabled="False" Text="{Binding TbSelectedFile}" VerticalContentAlignment="Center" FontSize="12"/>
+
+        <Button Height="40" Width="300" Content="Upload selected file" Grid.Row="5" Grid.Column="1" Command="{Binding UploadCommand}"/>
+
+        <ProgressBar Width="300" Height="15" Grid.Column="1" Grid.Row="7" Minimum="0" Maximum="{Binding ProgressBarMaximum}" Value="{Binding ProgressBarValue}" Visibility="{Binding ProgressbarVisibility}"/>
+        <Label Content="{Binding LblStatus}" Foreground="WhiteSmoke" Width="300" Grid.Row="9" Grid.Column="1" HorizontalContentAlignment="Center" FontSize="15"/>
+
+        <TextBox Text="{Binding TbDownloadURL}" Height="40" Width="465" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" VerticalContentAlignment="Center" FontSize="12"/>
     </Grid>
 </Window>
