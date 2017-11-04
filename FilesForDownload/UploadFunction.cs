@@ -77,11 +77,13 @@ namespace FilesForDownload
                 }
                 rs.Flush();
 
+                MainWindowViewModel.IsUploadSucceeded = true;
             }
             catch (Exception ex)
             {
                 MainWindowViewModel.ProgressbarVisibility = Visibility.Hidden;
                 MainWindowViewModel.LblStatus = ex.Message;
+                MainWindowViewModel.IsUploadSucceeded = false;
             }
             finally
             {
@@ -97,9 +99,13 @@ namespace FilesForDownload
                     rs.Dispose();
                 }
             }
-            MainWindowViewModel.ProgressbarVisibility = Visibility.Hidden;
-            MainWindowViewModel.LblStatus = MainWindowViewModel.UploadSuccess;
-            MainWindowViewModel.TbDownloadURL = " " + MainWindowViewModel.StandardDownloadPath + fileName;
+
+            if (MainWindowViewModel.IsUploadSucceeded)
+            {
+                MainWindowViewModel.ProgressbarVisibility = Visibility.Hidden;
+                MainWindowViewModel.LblStatus = MainWindowViewModel.UploadSuccess;
+                MainWindowViewModel.TbDownloadURL = " " + MainWindowViewModel.StandardDownloadPath + fileName;              
+            }
 
             MainWindowViewModel.TbSelectedFile = "";
         }

@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FilesForDownload"
+        xmlns:dragDrop="urn:gong-wpf-dragdrop"
         mc:Ignorable="d"
-        Title="Files for download" SizeToContent="WidthAndHeight" Background="DimGray" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+        Title="Files for download" SizeToContent="WidthAndHeight" Background="DimGray" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="ftp.ico">
 
     <Window.DataContext>
         <local:MainWindowViewModel />
@@ -39,12 +40,14 @@
         <Label Content="Upload file for customer" FontFamily="Calibri Light" FontSize="20" Foreground="WhiteSmoke" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
 
         <Button Height="40" Width="150" Content="Select file" Grid.Row="3" Grid.Column="3" Command="{Binding SelectFileCommand}"/>
-        <TextBox Height="40" Width="300" Grid.Row="3" Grid.Column="1" IsEnabled="False" Text="{Binding TbSelectedFile}" VerticalContentAlignment="Center" FontSize="12"/>
+        <Border dragDrop:DragDrop.IsDropTarget="True" dragDrop:DragDrop.DropHandler="{Binding}" Grid.Row="3" Grid.Column="1">
+            <TextBox Height="40" Width="300"   IsEnabled="False" Text="{Binding TbSelectedFile}" VerticalContentAlignment="Center" FontSize="12"/>
+        </Border>
 
         <Button Height="40" Width="300" Content="Upload selected file" Grid.Row="5" Grid.Column="1" Command="{Binding UploadCommand}"/>
 
         <ProgressBar Width="300" Height="15" Grid.Column="1" Grid.Row="7" Minimum="0" Maximum="{Binding ProgressBarMaximum}" Value="{Binding ProgressBarValue}" Visibility="{Binding ProgressbarVisibility}"/>
-        <Label Content="{Binding LblStatus}" Foreground="WhiteSmoke" Width="300" Grid.Row="9" Grid.Column="1" HorizontalContentAlignment="Center" FontSize="15"/>
+        <Label Content="{Binding LblStatus}" Foreground="WhiteSmoke" Width="465" Grid.Row="9" Grid.Column="1" HorizontalContentAlignment="Center" FontSize="13" Grid.ColumnSpan="3"/>
 
         <TextBox Text="{Binding TbDownloadURL}" Height="40" Width="465" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" VerticalContentAlignment="Center" FontSize="12"/>
     </Grid>

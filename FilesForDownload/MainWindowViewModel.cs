@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -8,10 +9,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace FilesForDownload
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : IDropTarget
     {
         #region Member variables
         private static readonly string _statusTextFileSelected = "File selected";
@@ -25,6 +27,7 @@ namespace FilesForDownload
         private static string _selectedFilePath = string.Empty;
 
         private static bool _isButtonUploadEnabled = false;
+        private static bool _isUploadSucceeded = false;
 
 
         private static Visibility _progressbarVisibility = Visibility.Hidden;
@@ -105,6 +108,12 @@ namespace FilesForDownload
             }
         }
 
+        public static bool IsUploadSucceeded
+        {
+            get { return _isUploadSucceeded; }
+            set { _isUploadSucceeded = value; }
+        }
+
 
         public static Visibility ProgressbarVisibility
         {
@@ -137,7 +146,17 @@ namespace FilesForDownload
         #endregion
 
         #region ICommand properties
+
+        /// <summary>
+        /// Simple property to hold the 'SelectFileCommand' - when executed
+        /// it will open the "open file dialog class" to select a file for the upload
+        /// </summary>
         public SelectFileCommand SelectFileCommand { get; private set; }
+
+        /// <summary>
+        /// Simple property to hold the 'UploadCommand' - when executed
+        /// it will start the upload to the ftp server
+        /// </summary>
         public UploadCommand UploadCommand { get; private set; }
         #endregion
 
@@ -147,6 +166,10 @@ namespace FilesForDownload
             UploadCommand = new UploadCommand(() => UploadFile());
         }
 
+        /// <summary>
+        /// Methos which starts when the upload button is clicked.
+        /// It does preparations and starts the upload with an other thread
+        /// </summary>
         public void UploadFile()
         {
             if (File.Exists(SelectedFilePath))
@@ -163,11 +186,15 @@ namespace FilesForDownload
                 IsButtonUploadEnabled = false;
                 TbSelectedFile = "";
                 LblStatus = "File doesnt exist";
-            }       
+            }
         }
 
+        /// <summary>
+        /// Method to upload the selected file
+        /// </summary>
         public void StartUploadingFile()
         {
+            LblStatus = "Upload started. Please wait...";
             UploadFunction.UploadFile(SelectedFilePath, SelectedFileName);
         }
 
@@ -181,6 +208,46 @@ namespace FilesForDownload
         public static void RaiseStaticPropertyChanged([CallerMemberName] string propertyName = null)
         {
             StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+        #region IDropTarget members
+
+        /// <summary>
+        /// Method for textbox selected file drag over
+        /// </summary>
+        public void DragOver(IDropInfo dropInfo)
+        {
+            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
+            dropInfo.Effects = dragFileList.Any(item =>
+            {
+                var extension = Path.GetExtension(item);
+                return true;
+            }) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        /// <summary>
+        /// Method for textbox selected file drop
+        /// </summary>
+        public void Drop(IDropInfo dropInfo)
+        {
+            var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
+            dropInfo.Effects = dragFileList.Any(item =>
+            {
+                var extension = Path.GetExtension(item);
+
+                // Update custom file textbox UI
+                TbDownloadURL = "";
+                SelectedFilePath = item;
+                SelectedFileName = Path.GetFileName(item);
+                TbSelectedFile = "  " + Path.GetFileName(item);
+                LblStatus = StatusTextFileSelected;
+                IsButtonUploadEnabled = true;
+                CommandManager.InvalidateRequerySuggested();
+
+                return true;
+            }) ? DragDropEffects.Copy : DragDropEffects.None;
         }
         #endregion
 
