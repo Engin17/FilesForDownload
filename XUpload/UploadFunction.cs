@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace FilesForDownload
+namespace XUpload
 {
     public class UploadFunction
     {
@@ -104,11 +104,21 @@ namespace FilesForDownload
             {
                 MainWindowViewModel.ProgressbarVisibility = Visibility.Hidden;
                 MainWindowViewModel.LblStatus = MainWindowViewModel.UploadSuccess;
-                MainWindowViewModel.TbDownloadURL = " " + MainWindowViewModel.StandardDownloadPath + fileName;              
+                MainWindowViewModel.TbDownloadURL = MainWindowViewModel.StandardDownloadPath + fileName;
+                MainWindowViewModel.IsSelectedText = true;                
             }
 
             MainWindowViewModel.TbSelectedFile = "";
         }
+
+        /// <summary>
+        /// Method to copy the download URL to the Clipboard
+        /// </summary>
+        public static void CopyURLToClipboard()
+        {
+            Clipboard.SetText(MainWindowViewModel.StandardDownloadPath + MainWindowViewModel.SelectedFileName);
+        }
+
 
     }
 }

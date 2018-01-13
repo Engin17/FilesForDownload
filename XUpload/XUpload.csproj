@@ -111,7 +111,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CopyURLCommand.cs" />
     <Compile Include="SelectFileCommand.cs" />
+    <Compile Include="SmartTextBox.cs" />
     <Compile Include="UploadCommand.cs" />
     <Compile Include="UploadFunction.cs" />
     <Page Include="MainWindow.xaml">

@@ -1,12 +1,12 @@
-﻿<Window x:Class="FilesForDownload.MainWindow"
+﻿<Window x:Class="XUpload.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FilesForDownload"
+        xmlns:local="clr-namespace:XUpload"
         xmlns:dragDrop="urn:gong-wpf-dragdrop"
         mc:Ignorable="d"
-        Title="Files for download" SizeToContent="WidthAndHeight" Background="DimGray" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="ftp.ico">
+        Title="XUpload" SizeToContent="WidthAndHeight" Background="#4d535e" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="ftp.ico">
 
     <Window.DataContext>
         <local:MainWindowViewModel />
@@ -14,11 +14,11 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="55" />
             <ColumnDefinition Width="300" />
             <ColumnDefinition Width="15" />
             <ColumnDefinition Width="150" />
-            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="55" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -33,6 +33,8 @@
             <RowDefinition Height="15" />
             <RowDefinition Height="40" />
             <RowDefinition Height="15" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="5" />
             <RowDefinition Height="40" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
@@ -49,6 +51,8 @@
         <ProgressBar Width="300" Height="15" Grid.Column="1" Grid.Row="7" Minimum="0" Maximum="{Binding ProgressBarMaximum}" Value="{Binding ProgressBarValue}" Visibility="{Binding ProgressbarVisibility}"/>
         <Label Content="{Binding LblStatus}" Foreground="WhiteSmoke" Width="465" Grid.Row="9" Grid.Column="1" HorizontalContentAlignment="Center" FontSize="13" Grid.ColumnSpan="3"/>
 
-        <TextBox Text="{Binding TbDownloadURL}" Height="40" Width="465" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" VerticalContentAlignment="Center" FontSize="12"/>
+        <local:SmartTextBox Text="{Binding TbDownloadURL}" IsSelectedText="{Binding IsSelectedText}" Height="40" Width="465" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" VerticalContentAlignment="Center" FontSize="12" />
+
+        <Button Content="Copy URL" Height="40" Width="150" Grid.Row="13" Grid.Column="3" Command="{Binding CopyURLCommand}"/>
     </Grid>
 </Window>

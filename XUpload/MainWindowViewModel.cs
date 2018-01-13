@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace FilesForDownload
+namespace XUpload
 {
-    public class MainWindowViewModel : IDropTarget
+    public class MainWindowViewModel : IDropTarget, INotifyPropertyChanged
     {
         #region Member variables
         private static readonly string _statusTextFileSelected = "File selected";
@@ -29,6 +29,8 @@ namespace FilesForDownload
         private static bool _isButtonUploadEnabled = false;
         private static bool _isUploadSucceeded = false;
 
+        private static bool _isSelectedText = false;
+
 
         private static Visibility _progressbarVisibility = Visibility.Hidden;
 
@@ -36,7 +38,7 @@ namespace FilesForDownload
         private static long _progressBarMaximum = 100;
         private static long _progressBarValue = 0;
         #endregion
-
+               
         #region Property Members
         public static string SelectedFileName { get; set; }
         public static string StatusTextFileSelected
@@ -143,6 +145,16 @@ namespace FilesForDownload
                 RaiseStaticPropertyChanged();
             }
         }
+
+        public static bool IsSelectedText
+        {
+            get { return _isSelectedText; }
+            set
+            {
+                _isSelectedText = value;
+                RaiseStaticPropertyChanged();
+            }
+        }
         #endregion
 
         #region ICommand properties
@@ -158,12 +170,19 @@ namespace FilesForDownload
         /// it will start the upload to the ftp server
         /// </summary>
         public UploadCommand UploadCommand { get; private set; }
+
+        /// <summary>
+        /// Simple property to hold the 'CopyURLCommand' - when executed
+        /// it will copy the download URL to the clipboard
+        /// </summary>
+        public CopyURLCommand CopyURLCommand { get; private set; }
         #endregion
 
         public MainWindowViewModel()
         {
             SelectFileCommand = new SelectFileCommand(() => UploadFunction.SelectFile());
             UploadCommand = new UploadCommand(() => UploadFile());
+            CopyURLCommand = new CopyURLCommand(() => UploadFunction.CopyURLToClipboard());
         }
 
         /// <summary>
@@ -211,6 +230,13 @@ namespace FilesForDownload
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         #region IDropTarget members
 

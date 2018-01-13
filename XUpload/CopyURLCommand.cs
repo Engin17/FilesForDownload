@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace FilesForDownload
+namespace XUpload
 {
-    public class SelectFileCommand : ICommand
+    public class CopyURLCommand : ICommand
     {
         private Action _eventHandler;
 
-        public SelectFileCommand(Action handler)
+        public CopyURLCommand(Action handler)
         {
             _eventHandler = handler;
         }
