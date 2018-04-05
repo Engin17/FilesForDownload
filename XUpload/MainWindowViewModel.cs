@@ -18,7 +18,7 @@ namespace XUpload
         #region Member variables
         private static readonly string _statusTextFileSelected = "File selected";
         private static readonly string _uploadSuccess = "File successfully uploaded";
-        private static readonly string _standardDownloadPath = @"https://www.seetec.eu/xchange/";
+        private static readonly string _standardDownloadPath = @"https://downloads.seetec-video.com/xchange/";
 
         private static string _tbSelectedFile = string.Empty;
         private static string _lblStatus = string.Empty;
