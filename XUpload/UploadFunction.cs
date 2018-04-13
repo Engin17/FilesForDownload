@@ -52,12 +52,12 @@ namespace XUpload
                 string file = filePath;
                 string uploadFileName = new FileInfo(file).Name;
 
-                string uploadUrl = "ftp://downloads.seetec-video.com/";
+                string uploadUrl = MainWindowViewModel.FtpServerAdress;
                 fs = new FileStream(file, FileMode.Open, FileAccess.Read);
                 string ftpUrl = string.Format("{0}/{1}", uploadUrl, uploadFileName);
                 FtpWebRequest requestObj = FtpWebRequest.Create(ftpUrl) as FtpWebRequest;
                 requestObj.Method = WebRequestMethods.Ftp.UploadFile;
-                requestObj.Credentials = new NetworkCredential("ftp12734510-xchange", "pho7tuSh");
+                requestObj.Credentials = new NetworkCredential(MainWindowViewModel.FtpUsername, MainWindowViewModel.FtpPassword);
                 rs = requestObj.GetRequestStream();
 
                 byte[] buffer = new byte[8192];

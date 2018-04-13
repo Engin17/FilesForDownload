@@ -19,6 +19,9 @@ namespace XUpload
         private static readonly string _statusTextFileSelected = "File selected";
         private static readonly string _uploadSuccess = "File successfully uploaded";
         private static readonly string _standardDownloadPath = @"https://downloads.seetec-video.com/xchange/";
+        private static readonly string _ftpServerAdress = @"ftp://downloads.seetec-video.com/";
+        private static readonly string _ftpUsername = "ftp12734510-xchange";
+        private static readonly string _ftpPassword = "pho7tuSh";
 
         private static string _tbSelectedFile = string.Empty;
         private static string _lblStatus = string.Empty;
@@ -64,6 +67,20 @@ namespace XUpload
             get { return _standardDownloadPath; }
         }
 
+        public static string FtpServerAdress
+        {
+            get { return _ftpServerAdress; }
+        }
+
+        public static string FtpUsername
+        {
+            get { return _ftpUsername; }
+        }
+
+        public static string FtpPassword
+        {
+            get { return _ftpPassword; }
+        }
 
         public static string LblStatus
         {

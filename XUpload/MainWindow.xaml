@@ -6,25 +6,34 @@
         xmlns:local="clr-namespace:XUpload"
         xmlns:dragDrop="urn:gong-wpf-dragdrop"
         mc:Ignorable="d"
-        Title="XUpload" SizeToContent="WidthAndHeight" Background="#4d535e" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="ftp.ico">
+        Title="XUpload" SizeToContent="WidthAndHeight" Background="#3d4245" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="ftp.ico" BorderThickness="3" BorderBrush="AliceBlue" >
 
     <Window.DataContext>
         <local:MainWindowViewModel />
     </Window.DataContext>
 
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#ffECECEC" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="55" />
+            <ColumnDefinition Width="70" />
             <ColumnDefinition Width="300" />
             <ColumnDefinition Width="15" />
             <ColumnDefinition Width="150" />
-            <ColumnDefinition Width="55" />
+            <ColumnDefinition Width="70" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="15" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="25" />
             <RowDefinition Height="40" />
             <RowDefinition Height="15" />
             <RowDefinition Height="40" />
@@ -36,22 +45,29 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="5" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
-        <Label Content="Upload file for customer" FontFamily="Calibri Light" FontSize="20" Foreground="WhiteSmoke" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <TextBlock FontFamily="Segoe UI" FontSize="30" Foreground="White" Text="Upload file for customer" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" >
+            <TextBlock.OpacityMask>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBlock.OpacityMask>
+        </TextBlock>
 
-        <Button Height="40" Width="150" Content="Select file" Grid.Row="3" Grid.Column="3" Command="{Binding SelectFileCommand}"/>
+        <Button Height="40" Width="150" Content="Select file" Grid.Row="3" Grid.Column="3" Command="{Binding SelectFileCommand}"  />
         <Border dragDrop:DragDrop.IsDropTarget="True" dragDrop:DragDrop.DropHandler="{Binding}" Grid.Row="3" Grid.Column="1">
-            <TextBox Height="40" Width="300"   IsEnabled="False" Text="{Binding TbSelectedFile}" VerticalContentAlignment="Center" FontSize="12"/>
+            <TextBox Height="40" Width="300"   IsEnabled="False" Text="{Binding TbSelectedFile}" VerticalContentAlignment="Center" FontSize="12" BorderBrush="Black" BorderThickness="1"/>
         </Border>
 
         <Button Height="40" Width="300" Content="Upload selected file" Grid.Row="5" Grid.Column="1" Command="{Binding UploadCommand}"/>
 
-        <ProgressBar Width="300" Height="15" Grid.Column="1" Grid.Row="7" Minimum="0" Maximum="{Binding ProgressBarMaximum}" Value="{Binding ProgressBarValue}" Visibility="{Binding ProgressbarVisibility}"/>
+        <ProgressBar Foreground="DodgerBlue" Width="300" Height="15" Grid.Column="1" Grid.Row="7" Minimum="0" Maximum="{Binding ProgressBarMaximum}" Value="{Binding ProgressBarValue}" Visibility="{Binding ProgressbarVisibility}"/>
         <Label Content="{Binding LblStatus}" Foreground="WhiteSmoke" Width="465" Grid.Row="9" Grid.Column="1" HorizontalContentAlignment="Center" FontSize="13" Grid.ColumnSpan="3"/>
 
-        <local:SmartTextBox Text="{Binding TbDownloadURL}" IsSelectedText="{Binding IsSelectedText}" Height="40" Width="465" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" VerticalContentAlignment="Center" FontSize="12" />
+        <local:SmartTextBox Text="{Binding TbDownloadURL}" IsSelectedText="{Binding IsSelectedText}" Height="40" Width="465" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" VerticalContentAlignment="Center" FontSize="12" BorderBrush="Black" BorderThickness="1"/>
 
         <Button Content="Copy URL" Height="40" Width="150" Grid.Row="13" Grid.Column="3" Command="{Binding CopyURLCommand}"/>
     </Grid>
