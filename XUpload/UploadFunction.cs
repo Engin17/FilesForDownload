@@ -12,6 +12,8 @@ namespace XUpload
 {
     public class UploadFunction
     {
+        private static string uploadEscapedFileName = string.Empty;
+
         /// <summary>
         /// Method to select file for upload
         /// </summary>
@@ -45,6 +47,8 @@ namespace XUpload
 
             FileStream fs = null;
             Stream rs = null;
+   
+            uploadEscapedFileName = string.Empty;
 
             try
             {
@@ -52,9 +56,19 @@ namespace XUpload
                 string file = filePath;
                 string uploadFileName = new FileInfo(file).Name;
 
+                // Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should be removed
+                if (uploadFileName.StartsWith("#"))
+                {
+                    uploadFileName = uploadFileName.Substring(1);
+                }
+
+                //Converts a string to its escaped representation. Some characters within the filename causes problems
+                uploadEscapedFileName = Uri.EscapeDataString(uploadFileName);
+
                 string uploadUrl = MainWindowViewModel.FtpServerAdress;
                 fs = new FileStream(file, FileMode.Open, FileAccess.Read);
-                string ftpUrl = string.Format("{0}/{1}", uploadUrl, uploadFileName);
+                string ftpUrl = string.Format("{0}/{1}", uploadUrl, uploadEscapedFileName);
+
                 FtpWebRequest requestObj = FtpWebRequest.Create(ftpUrl) as FtpWebRequest;
                 requestObj.Method = WebRequestMethods.Ftp.UploadFile;
                 requestObj.Credentials = new NetworkCredential(MainWindowViewModel.FtpUsername, MainWindowViewModel.FtpPassword);
@@ -104,7 +118,7 @@ namespace XUpload
             {
                 MainWindowViewModel.ProgressbarVisibility = Visibility.Hidden;
                 MainWindowViewModel.LblStatus = MainWindowViewModel.UploadSuccess;
-                MainWindowViewModel.TbDownloadURL = MainWindowViewModel.StandardDownloadPath + fileName;
+                MainWindowViewModel.TbDownloadURL = MainWindowViewModel.StandardDownloadPath + uploadEscapedFileName;
                 MainWindowViewModel.IsSelectedText = true;                
             }
 
@@ -116,7 +130,7 @@ namespace XUpload
         /// </summary>
         public static void CopyURLToClipboard()
         {
-            Clipboard.SetText(MainWindowViewModel.StandardDownloadPath + MainWindowViewModel.SelectedFileName);
+            Clipboard.SetText(MainWindowViewModel.StandardDownloadPath + uploadEscapedFileName);
         }
 
 
