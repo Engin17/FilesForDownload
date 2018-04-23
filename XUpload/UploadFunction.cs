@@ -56,12 +56,6 @@ namespace XUpload
                 string file = filePath;
                 string uploadFileName = new FileInfo(file).Name;
 
-                // Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should be removed
-                if (uploadFileName.StartsWith("#"))
-                {
-                    uploadFileName = uploadFileName.Substring(1);
-                }
-
                 //Converts a string to its escaped representation. Some characters within the filename causes problems
                 uploadEscapedFileName = Uri.EscapeDataString(uploadFileName);
 
