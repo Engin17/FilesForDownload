@@ -1,12 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+
 
 namespace XUpload
 {
@@ -92,6 +89,7 @@ namespace XUpload
                 MainWindowViewModel.ProgressbarVisibility = Visibility.Hidden;
                 MainWindowViewModel.LblStatus = ex.Message;
                 MainWindowViewModel.IsUploadSucceeded = false;
+                MainWindowViewModel.IsUploadRunning = false;
             }
             finally
             {
@@ -113,7 +111,8 @@ namespace XUpload
                 MainWindowViewModel.ProgressbarVisibility = Visibility.Hidden;
                 MainWindowViewModel.LblStatus = MainWindowViewModel.UploadSuccess;
                 MainWindowViewModel.TbDownloadURL = MainWindowViewModel.StandardDownloadPath + uploadEscapedFileName;
-                MainWindowViewModel.IsSelectedText = true;                
+                MainWindowViewModel.IsSelectedText = true;
+                MainWindowViewModel.IsUploadRunning = false;
             }
 
             MainWindowViewModel.TbSelectedFile = "";

@@ -1,23 +1,22 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+
 
 namespace XUpload
 {
     public class MainWindowViewModel : IDropTarget, INotifyPropertyChanged
     {
         #region Member variables
-        private static readonly string _statusTextFileSelected = "File selected";
-        private static readonly string _uploadSuccess = "File successfully uploaded";
+        private static readonly string _statusTextFileSelected = "File Selected";
+        private static readonly string _uploadSuccess = "File Successfully Uploaded";
         private static readonly string _standardDownloadPath = @"https://downloads.seetec-video.com/xchange/";
         private static readonly string _ftpServerAdress = @"ftp://downloads.seetec-video.com/";
         private static readonly string _ftpUsername = "ftp12734510-xchange";
@@ -34,6 +33,10 @@ namespace XUpload
 
         private static bool _isSelectedText = false;
 
+        private static string _assemblyVersion = string.Empty;
+
+        private static bool _isUploadRunning = false;
+
 
         private static Visibility _progressbarVisibility = Visibility.Hidden;
 
@@ -41,7 +44,7 @@ namespace XUpload
         private static long _progressBarMaximum = 100;
         private static long _progressBarValue = 0;
         #endregion
-               
+
         #region Property Members
         public static string SelectedFileName { get; set; }
         public static string StatusTextFileSelected
@@ -172,6 +175,23 @@ namespace XUpload
                 RaiseStaticPropertyChanged();
             }
         }
+
+        public static string AssemblyVersion
+        {
+            get { return _assemblyVersion; }
+            set
+            {
+                _assemblyVersion = value;
+                RaiseStaticPropertyChanged();
+            }
+        }
+
+        public static bool IsUploadRunning
+        {
+            get { return _isUploadRunning; }
+            set { _isUploadRunning = value; }
+        }
+
         #endregion
 
         #region ICommand properties
@@ -200,6 +220,9 @@ namespace XUpload
             SelectFileCommand = new SelectFileCommand(() => UploadFunction.SelectFile());
             UploadCommand = new UploadCommand(() => UploadFile());
             CopyURLCommand = new CopyURLCommand(() => UploadFunction.CopyURLToClipboard());
+
+            // Get the current Assembly version to display it on the main window
+            AssemblyVersion = "" + GetRunningVersion();
         }
 
         /// <summary>
@@ -212,7 +235,12 @@ namespace XUpload
             {
                 ProgressbarVisibility = Visibility.Visible;
 
+                // Start upload in a new thread
                 Thread t = new Thread(new ThreadStart(StartUploadingFile));
+                t.IsBackground = true; // Thread will be closed when the application exits 
+
+                IsUploadRunning = true;
+
                 t.Start();
 
                 IsButtonUploadEnabled = false;
@@ -221,7 +249,7 @@ namespace XUpload
             {
                 IsButtonUploadEnabled = false;
                 TbSelectedFile = "";
-                LblStatus = "File doesnt exist";
+                LblStatus = "File Doesnt Exist";
             }
         }
 
@@ -230,10 +258,45 @@ namespace XUpload
         /// </summary>
         public void StartUploadingFile()
         {
-            LblStatus = "Upload started. Please wait...";
+            LblStatus = "Upload Started. Please Wait...";
             UploadFunction.UploadFile(SelectedFilePath, SelectedFileName);
         }
 
+        /// <summary>
+        /// Method to get the current Assembly information
+        /// </summary>
+        private string GetRunningVersion()
+        {
+            try
+            {
+                String s = "v" + Assembly.GetExecutingAssembly().GetName().Version;
+                return s.Substring(0, 6);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "xxx";
+            }
+            
+        }
+
+        #region Close application members
+        /// <summary>
+        /// This method is calles when the window Close button is clicked, or if the user presses ALT+F4.
+        /// Check if an upload process is active and ask the user if he really wants to quit the application.
+        /// </summary>
+        public static void OnProcessExit(object sender, CancelEventArgs e)
+        {
+            if (IsUploadRunning)
+            {
+                MessageBoxResult result = MessageBox.Show("Upload process is running. Do you really want to exit?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+        #endregion
 
         #region Notify static property members changed      
         public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
