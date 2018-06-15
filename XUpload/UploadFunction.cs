@@ -44,7 +44,7 @@ namespace XUpload
 
             FileStream fs = null;
             Stream rs = null;
-   
+
             uploadEscapedFileName = string.Empty;
 
             try
@@ -123,7 +123,15 @@ namespace XUpload
         /// </summary>
         public static void CopyURLToClipboard()
         {
-            Clipboard.SetText(MainWindowViewModel.StandardDownloadPath + uploadEscapedFileName);
+            try
+            {
+                Clipboard.SetDataObject(MainWindowViewModel.StandardDownloadPath + uploadEscapedFileName);
+            }
+            catch (Exception ex)
+            {
+                MainWindowViewModel.TbDownloadURL = ex.Message;
+            }
+
         }
 
 

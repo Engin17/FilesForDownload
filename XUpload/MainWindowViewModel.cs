@@ -226,7 +226,7 @@ namespace XUpload
         }
 
         /// <summary>
-        /// Methos which starts when the upload button is clicked.
+        /// Method which starts when the upload button is clicked.
         /// It does preparations and starts the upload with an other thread
         /// </summary>
         public void UploadFile()
