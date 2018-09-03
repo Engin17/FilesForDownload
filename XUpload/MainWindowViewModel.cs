@@ -19,8 +19,8 @@ namespace XUpload
         private static readonly string _uploadSuccess = "File Successfully Uploaded";
         private static readonly string _standardDownloadPath = @"https://downloads.seetec-video.com/xchange/";
         private static readonly string _ftpServerAdress = @"ftp://downloads.seetec-video.com/";
-        private static readonly string _ftpUsername = "ftp12734510-xchange";
-        private static readonly string _ftpPassword = "pho7tuSh";
+        private static readonly string _ftpUsername = "xchange";
+        private static readonly string _ftpPassword = "hT34du9?";
 
         private static string _tbSelectedFile = string.Empty;
         private static string _lblStatus = string.Empty;
