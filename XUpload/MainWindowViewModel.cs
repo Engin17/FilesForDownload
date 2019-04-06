@@ -277,7 +277,7 @@ namespace XUpload
                 Console.WriteLine(ex.Message);
                 return "xxx";
             }
-            
+
         }
 
         #region Close application members
@@ -329,7 +329,7 @@ namespace XUpload
             dropInfo.Effects = dragFileList.Any(item =>
             {
                 var extension = Path.GetExtension(item);
-                return true;
+                return extension != null && extension != "";
             }) ? DragDropEffects.Copy : DragDropEffects.None;
         }
 
@@ -352,7 +352,7 @@ namespace XUpload
                 IsButtonUploadEnabled = true;
                 CommandManager.InvalidateRequerySuggested();
 
-                return true;
+                return extension != null && extension != "";
             }) ? DragDropEffects.Copy : DragDropEffects.None;
         }
         #endregion
